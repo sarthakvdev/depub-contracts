@@ -6,11 +6,14 @@
   "author": "Sarthak Verma",
   "license": "MIT",
   "dependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "chai": "^4.3.7",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
-    "hardhat": "^2.12.5"
+    "hardhat": "^2.12.5",
+    "mocha": "^10.2.0"
   }
 }
