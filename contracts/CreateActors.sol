@@ -25,12 +25,12 @@ contract CreateActors {
     }
 
     // EVENTS
-    event HasReadBook(uint256 bookName, uint256 userName);
     event UserCreated(string userType, string userName, string aboutUser); // either Author or Reader
     event BookCreated(string bookName, string author);
+    event HasReadBook(uint256 bookName, uint256 userName);
     
     uint bookId = 0;
-    // uint readerID = 0; // todo: Is it required?
+    // uint readerID = 0; // Is it required?
     uint authorID = 0;
 
     // MAPPINGS
