@@ -2,7 +2,9 @@
 pragma solidity ^0.8.17;
 
 // Contract #1 createActors
-contract createActors {
+contract CreateActors {
+    constructor() {}
+
     // STRUCTS
     struct author{
         string name;
