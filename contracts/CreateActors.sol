@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.17;
 
+import "hardhat/console.sol";
+
 // Contract #1 createActors
 contract CreateActors {
     constructor() {}
 
     // STRUCTS
-    struct author{
+    struct author {
         string name;
         string aboutAuthor;
-        uint[] bookIdList;
+        uint256[] bookIdList; // List of all books by the Author
     }
 
     struct reader {
@@ -19,30 +21,38 @@ contract CreateActors {
 
     struct book {
         address authorId;
-        uint bookId;
+        uint256 bookId;
         string name;
-        uint[] chapterIdList;
+        uint256[] chapterIdList;
     }
 
     // EVENTS
     event UserCreated(string userType, string userName, string aboutUser); // either Author or Reader
     event BookCreated(string bookName, string author);
     event HasReadBook(uint256 bookName, uint256 userName);
-    
-    uint bookId = 0;
+
+    uint256 bookId = 0;
     // uint readerID = 0; // Is it required?
-    uint authorID = 0;
+    uint256 authorID = 0;
 
     // MAPPINGS
     mapping(address => author) public authorIdMapping;
-    mapping(uint => address) authorIdToAddress;
+    mapping(uint256 => address) authorIdToAddress;
     mapping(address => reader) public readerIdMapping;
     // mapping(uint => address) public readerIdToAddress;
-    mapping(uint => book) public bookIdMapping;
+    mapping(uint256 => book) public bookIdMapping;
     mapping(address => book[]) public booksOfAuthor;
 
-    function createAuthor(string memory _name, string memory _aboutAuthor) public {
-        // check if msg.sender is not in authorIdMapping
+    function createAuthor(string memory _name, string memory _aboutAuthor)
+        public
+    {
+        // check if author is already not in mapping
+        require(
+            bytes(authorIdMapping[msg.sender].name).length == 0,
+            "Author already registered."
+        );
+        // console.log("bytes length %s", bytes(authorIdMapping[msg.sender].name).length);
+
         authorIdMapping[msg.sender].name = _name;
         authorIdMapping[msg.sender].aboutAuthor = _aboutAuthor;
         authorIdToAddress[authorID] = msg.sender;
@@ -50,7 +60,9 @@ contract CreateActors {
         emit UserCreated("Author", _name, _aboutAuthor);
     }
 
-    function createReader(string memory _name, string memory _aboutReader) public {
+    function createReader(string memory _name, string memory _aboutReader)
+        public
+    {
         // check if msg.sender is not in readerIdMapping
         readerIdMapping[msg.sender].name = _name;
         readerIdMapping[msg.sender].aboutReader = _aboutReader;
@@ -60,7 +72,7 @@ contract CreateActors {
 
     function createBook(string memory _name) public {
         // check if msg.sender exists in authorIdMapping
-        //authorBookList[msg.sender][authorBookCount] = bookId;
+        // authorBookList[msg.sender][authorBookCount] = bookId;
         authorIdMapping[msg.sender].bookIdList.push(bookId);
         bookIdMapping[bookId].name = _name;
         bookIdMapping[bookId].authorId = msg.sender;
@@ -69,30 +81,31 @@ contract CreateActors {
         booksOfAuthor[msg.sender].push(bookIdMapping[bookId]);
         emit BookCreated(_name, authorIdMapping[msg.sender].name);
     }
-    
-    function getAllAuthors() view public returns (string[] memory) {
-        string[] memory authorList = new string[](authorID);
-        for (uint i  = 0; i < authorID; i++) {
+
+    function getAllAuthors() public view returns (string[] memory) {
+        // Creates an array of length authorID
+        string[] memory authorsList = new string[](authorID);
+        for (uint256 i = 0; i < authorID; i++) {
             address _temp = authorIdToAddress[i];
-            authorList[i] = authorIdMapping[_temp].name;
+            authorsList[i] = authorIdMapping[_temp].name;
         }
-        return authorList;
+        return authorsList;
     }
-    
-    function getAllBooksOfAuthor() view public returns (string[] memory) {
+
+    function getAllBooksOfAuthor() public view returns (string[] memory) {
         author memory focusAuthor = authorIdMapping[msg.sender];
-        uint[] memory all_books_id = focusAuthor.bookIdList;
+        uint256[] memory all_books_id = focusAuthor.bookIdList;
         string[] memory bookNameList = new string[](all_books_id.length);
         // Warning: For loop over dynamic array doesn't apply as it's a view function
-        for (uint i = 0; i < all_books_id.length; i++) {
+        for (uint256 i = 0; i < all_books_id.length; i++) {
             bookNameList[i] = bookIdMapping[i].name;
         }
         return bookNameList;
     }
-    
-    function getAllBooks() view public returns (book[] memory) {
+
+    function getAllBooks() public view returns (book[] memory) {
         book[] memory allBooks = new book[](bookId);
-        for (uint i = 0; i < bookId; i++) {
+        for (uint256 i = 0; i < bookId; i++) {
             allBooks[i] = bookIdMapping[i];
         }
         return allBooks;
