@@ -25,7 +25,9 @@ contract Story is CreateActors {
     }
 
     uint256 chapterId = 0;
+
     mapping(uint256 => chapter) public ChapterMapping;
+
     event ChapterCreated(string chapterName, string authorName);
 
     function createChapter(
@@ -35,7 +37,7 @@ contract Story is CreateActors {
         string memory _question,
         bool _authorPreference
     ) public payable {
-        require(msg.value >= 1 ether, "keep a bounty");
+        require(msg.value >= 1 ether, "Keep a Bounty");
         //uint chapterCount = bookIdMapping[_bookId].chapterIdList.length;
         bookIdMapping[_bookId].chapterIdList.push(chapterId);
         ChapterMapping[chapterId].author = msg.sender;
@@ -49,27 +51,32 @@ contract Story is CreateActors {
         emit ChapterCreated(_name, authorIdMapping[msg.sender].name);
     }
 
-    function getAllChapterBooks(uint256 _bookId)
+    /**
+        @param _bookId - Book's id you want chapters of
+        @return All the chapters of a given Book by ID
+    */
+    function getAllChaptersOfBook(uint256 _bookId)
         public
         view
         returns (string[] memory)
     {
         uint256[] memory chaptersList = bookIdMapping[_bookId].chapterIdList;
-        string[] memory chapterOfBook = new string[](chaptersList.length);
+        string[] memory chaptersOfBook = new string[](chaptersList.length);
         for (uint256 i = 0; i < chaptersList.length; i++) {
-            chapterOfBook[i] = ChapterMapping[chaptersList[i]].name;
+            chaptersOfBook[i] = ChapterMapping[chaptersList[i]].name;
         }
-        return chapterOfBook;
+        return chaptersOfBook;
     }
 
     function readChapter(uint256 _chapterId) public {
-        // Drontend how will the owner call readChapter !!!!
+        // todo: Frontend how will the owner call readChapter
         // Require(msg.sender == owner);
         // Don't push again and again
         ChapterMapping[_chapterId].readers.push(msg.sender);
     }
 
-    /*
+    /**
+     * @param _chapterId - Id of chapter user is reading
      * Paying readers for reading new chapters
      */
     function payReaders(uint256 _chapterId) public {
@@ -91,9 +98,13 @@ contract Story is CreateActors {
             payable(readerList[i]).transfer(readersShare);
         }
 
-        ChapterMapping[_chapterId].chapterState = 1; // Readers have been paid
+        // Readers have been paid
+        ChapterMapping[_chapterId].chapterState = 1;
     }
-
+    /**
+     * @param _chapterId - Id of Chapter
+     * @param _vote - Vote if true, Stake bounty if false
+     */
     function voteForFollowup(uint256 _chapterId, bool _vote) public payable {
         uint256 bounty = msg.value;
         require(
@@ -112,7 +123,13 @@ contract Story is CreateActors {
         }
     }
 
-    function createConsesus(uint256 _chapterId)
+    /**
+     * @param _chapterId
+     * @return winner - side of betting won
+     * @return totalPool - total amount of tokens in pool (author + betting stake)
+     * @return returnSum - amount of tokens to be returned
+     */
+    function createConsensus(uint256 _chapterId)
         internal
         view
         returns (
@@ -125,7 +142,7 @@ contract Story is CreateActors {
         uint256 returnSum = 0;
         chapter storage focusChapter = ChapterMapping[_chapterId];
 
-        // figure out propotion of winner
+        // figure out proportion of winner
         uint256 totalTrueCount;
         uint256 totalFalseCount;
         uint256 totalTrueSum;
@@ -145,7 +162,7 @@ contract Story is CreateActors {
         if (totalTrueSum > totalFalseSum) {
             winner = true;
             returnSum = totalTrueSum;
-        } else if (totalFalseSum > totalTrueSum) {
+        } else if (totalTrueSum < totalFalseSum) {
             winner = false;
             returnSum = totalFalseSum;
         } else {
@@ -178,11 +195,11 @@ contract Story is CreateActors {
         // This should work only if state is active and unresolved
         require(ChapterMapping[chapterId].chapterState == 0);
 
-        (bool winner, uint256 total_pool, uint256 returnSum) = createConsesus(
+        (bool winner, uint256 total_pool, uint256 returnSum) = createConsensus(
             _chapterId
         );
         ChapterMapping[_chapterId].chapterState = 2;
-        require(!focusChapter.isResolved);
+        require(!focusChapter.isResolved, "Chapter is already resolved!");
 
         for (uint256 i = 0; i < focusChapter.readers.length; i++) {
             address temp_ = focusChapter.readers[i];
