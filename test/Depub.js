@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 const { describe, it } = require("mocha");
 const { expect } = require("chai");
 
-describe("CreateActors", async function () {
+describe("CreateActors", async () => {
   let createActors;
   let alice;
   let bob;
@@ -10,7 +10,7 @@ describe("CreateActors", async function () {
   let authorsList;
   let signers;
 
-  it("Should create an Author", async function () {
+  it("Should create an Author", async () => {
     const CreateActors = await ethers.getContractFactory("CreateActors");
     createActors = await CreateActors.deploy();
     await createActors.deployed();
@@ -69,7 +69,7 @@ describe("CreateActors", async function () {
       );
   });
 
-  it("Should create a Reader", async function () {
+  it("Should create a Reader", async () => {
     await expect(
       createActors
         .connect(signers[3])
@@ -79,7 +79,7 @@ describe("CreateActors", async function () {
       .withArgs("Reader", "Daniel", "Passionate about reading books!");
   });
 
-  it("Should create a Book", async function () {
+  it("Should create a Book", async () => {
     // Calling from signer alice, assigning her as the author
     await expect(createActors.connect(alice).createBook("Dark Matter"))
       .to.emit(createActors, "BookCreated")
@@ -95,7 +95,7 @@ describe("CreateActors", async function () {
       .withArgs("The Stand", "Bob");
   });
 
-  it("Should give the list of all Authors", async function () {
+  it("Should give the list of all Authors", async () => {
     authorsList = await createActors.getAllAuthors();
     const ourAuthorsList = ["Alice", "Bob", "Carol"];
 
@@ -104,7 +104,7 @@ describe("CreateActors", async function () {
     });
   });
 
-  it("Should give list of all books by Author", async function () {
+  it("Should give list of all books by Author", async () => {
     const booksByAlice = await createActors
       .connect(alice)
       .getAllBooksOfAuthor();
@@ -119,5 +119,11 @@ describe("CreateActors", async function () {
     expectedBooksByBob.forEach((book, index) => {
       expect(book == booksByBob[index]);
     });
+  });
+});
+
+describe("Story", async function () {
+  it("Test fas fas", () => {
+    console.log("This is my completed test.");
   });
 });
