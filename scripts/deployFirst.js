@@ -5,7 +5,6 @@ async function main() {
   // deploy the CreateActors contract
   const CreateActors = await ethers.getContractFactory("CreateActors");
   const createActors = await CreateActors.deploy();
-
   await createActors.deployed();
 
   console.log("CreateActors contract deployed at", createActors.address);

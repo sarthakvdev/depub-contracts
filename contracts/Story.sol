@@ -51,10 +51,8 @@ contract Story is CreateActors {
         emit ChapterCreated(_name, authorIdMapping[msg.sender].name);
     }
 
-    /**
-        @param _bookId - Book's id you want chapters of
-        @return All the chapters of a given Book by ID
-    */
+        // @param _bookId - Book's id you want chapters of
+        // @return All the chapters of a given Book by ID
     function getAllChaptersOfBook(uint256 _bookId)
         public
         view
@@ -75,10 +73,8 @@ contract Story is CreateActors {
         ChapterMapping[_chapterId].readers.push(msg.sender);
     }
 
-    /**
-     * @param _chapterId - Id of chapter user is reading
-     * Paying readers for reading new chapters
-     */
+    //  @param _chapterId - Id of chapter user is reading
+    //  Paying readers for reading new chapters
     function payReaders(uint256 _chapterId) public {
         //require(msg.sender == owner);
         require(
@@ -101,10 +97,9 @@ contract Story is CreateActors {
         // Readers have been paid
         ChapterMapping[_chapterId].chapterState = 1;
     }
-    /**
-     * @param _chapterId - Id of Chapter
-     * @param _vote - Vote if true, Stake bounty if false
-     */
+
+    //  @param _chapterId - Id of Chapter
+    //  param _vote - Vote if true, Stake bounty if false
     function voteForFollowup(uint256 _chapterId, bool _vote) public payable {
         uint256 bounty = msg.value;
         require(
@@ -123,12 +118,10 @@ contract Story is CreateActors {
         }
     }
 
-    /**
-     * @param _chapterId
-     * @return winner - side of betting won
-     * @return totalPool - total amount of tokens in pool (author + betting stake)
-     * @return returnSum - amount of tokens to be returned
-     */
+    // @param _chapterId
+    // @return winner - side of betting won
+    // @return totalPool - total amount of tokens in pool (author + betting stake)
+    // @return returnSum - amount of tokens to be returned
     function createConsensus(uint256 _chapterId)
         internal
         view

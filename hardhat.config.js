@@ -1,16 +1,17 @@
 require("@nomiclabs/hardhat-waffle");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {
-      chainId: 1337,
+    mumbai: {
+      url: "https://matic-mumbai.chainstacklabs.com",
+      accounts: [process.env.PRIVATE_KEY],
     },
-    // goerli: {
-    //   url: "Alchemy Private Key",
-    //   accounts: [privateKey1],
-    // }
+    // hardhat: {
+    //   chainId: 1337,
+    // },
   },
   solidity: "0.8.17",
   paths: {
@@ -20,6 +21,6 @@ module.exports = {
     artifacts: "./artifacts",
   },
   mocha: {
-    timeout: 40000 // As per hardhat docs
-  }
+    timeout: 40000, // As per hardhat docs
+  },
 };
