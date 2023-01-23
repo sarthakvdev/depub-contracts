@@ -1,0 +1,2 @@
+export const createActorsContractAddress = "0xC073CB2F68F8A91d9E454319aD91729263683e64"
+export const createActorsOwnerAddress = "0xe888424bD9A4Ab89EB2Bb2Ea3CD44c537060C8d4"

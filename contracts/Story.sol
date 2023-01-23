@@ -88,7 +88,7 @@ contract Story is CreateActors {
         // Equally distributing bounty to all the readers
         uint256 readersShare = bounty / numberOfReaders;
         // bounty = 0 ether;
-
+ 
         // Paying all Readers their share
         for (uint256 i = 0; i < numberOfReaders; i++) {
             payable(readerList[i]).transfer(readersShare);

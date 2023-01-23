@@ -10,7 +10,7 @@ async function main() {
   console.log("CreateActors contract deployed at", createActors.address);
 
   fs.writeFileSync(
-    "./config.js",
+    "./configCreateActor.js",
     `export const createActorsContractAddress = "${
       createActors.address
     }"\nexport const createActorsOwnerAddress = "${await createActors.signer.getAddress()}"`

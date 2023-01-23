@@ -32,14 +32,14 @@ contract CreateActors {
     event HasReadBook(uint256 bookName, uint256 userName);
 
     uint256 bookId = 0;
-    // uint readerID = 0; // Is it required?
+    uint readerID = 0; // required to get total readers
     uint256 authorID = 0;
 
     // MAPPINGS
     mapping(address => author) public authorIdMapping;
     mapping(uint256 => address) authorIdToAddress;
     mapping(address => reader) public readerIdMapping;
-    // mapping(uint => address) public readerIdToAddress;
+    mapping(uint => address) public readerIdToAddress;
     mapping(uint256 => book) public bookIdMapping;
     mapping(address => book[]) public booksOfAuthor;
 
@@ -49,7 +49,7 @@ contract CreateActors {
         // check if author is already not in mapping
         require(
             bytes(authorIdMapping[msg.sender].name).length == 0,
-            "Author already registered."
+            "Author already registered!"
         );
         // console.log("bytes length %s", bytes(authorIdMapping[msg.sender].name).length);
 
@@ -63,10 +63,15 @@ contract CreateActors {
     function createReader(string memory _name, string memory _aboutReader)
         public
     {
+        require(
+            bytes(readerIdMapping[msg.sender].name).length == 0,
+            "Reader already registered!"
+        );
         // check if msg.sender is not in readerIdMapping
         readerIdMapping[msg.sender].name = _name;
         readerIdMapping[msg.sender].aboutReader = _aboutReader;
-        // readerID++;
+        readerIdToAddress[readerID] = msg.sender;
+        readerID++;
         emit UserCreated("Reader", _name, _aboutReader);
     }
 
@@ -82,14 +87,23 @@ contract CreateActors {
         emit BookCreated(_name, authorIdMapping[msg.sender].name);
     }
 
-    function getAllAuthors() public view returns (string[] memory) {
+    function getAllAuthors() public view returns (author[] memory) {
         // Creates an array of length authorID
-        string[] memory authorsList = new string[](authorID);
+        author[] memory authorsList = new author[](authorID);
         for (uint256 i = 0; i < authorID; i++) {
             address _temp = authorIdToAddress[i];
-            authorsList[i] = authorIdMapping[_temp].name;
+            authorsList[i] = authorIdMapping[_temp];
         }
         return authorsList;
+    }
+
+    function getAllReaders() public view returns (reader[] memory) {
+        reader[] memory readersList = new reader[](readerID);
+        for (uint256 i = 0; i < readerID; i++) {
+            address _temp = readerIdToAddress[i];
+            readersList[i] = readerIdMapping[_temp];
+        }
+        return readersList;
     }
 
     function getAllBooksOfAuthor() public view returns (string[] memory) {
