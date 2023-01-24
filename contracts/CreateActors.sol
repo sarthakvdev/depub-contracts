@@ -119,7 +119,7 @@ contract CreateActors {
         string[] memory bookNameList = new string[](all_books_id.length);
         // Warning: For loop over dynamic array doesn't apply as it's a view function
         for (uint256 i = 0; i < all_books_id.length; i++) {
-            bookNameList[i] = bookIdMapping[i].name;
+            bookNameList[i] = bookIdMapping[all_books_id[i]].name;
         }
         return bookNameList;
     }

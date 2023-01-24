@@ -37,7 +37,7 @@ contract Story is CreateActors {
         string memory _question,
         bool _authorPreference
     ) public payable {
-        require(msg.value >= 0.001 ether, "Bounty should be more than 0.001 ETH!");
+        // require(msg.value >= 0.001 ether, "Bounty should be more than 0.001 ETH!");
         // bool isOriginalAuthor = false;
         // // The signer should be the author of the book by given bookId.
         // author authorBookList = authorIdMapping[msg.signer].bookIdList;

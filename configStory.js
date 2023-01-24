@@ -1,2 +1,2 @@
-export const storyContractAddress = "0xe02f23448bBCFF6ddE897F2842CD9ef768120912"
+export const storyContractAddress = "0x4aE1D3d4c73018b50dcdE2FE6C89672E0BB3270e"
 export const storyOwnerAddress = "0xe888424bD9A4Ab89EB2Bb2Ea3CD44c537060C8d4"
