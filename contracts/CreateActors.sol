@@ -12,11 +12,13 @@ contract CreateActors {
         string name;
         string aboutAuthor;
         uint256[] bookIdList; // List of all books by the Author
+        address authorAddr;
     }
 
     struct reader {
         string name;
         string aboutReader;
+        address readerAddr;
     }
 
     struct book {
@@ -55,6 +57,7 @@ contract CreateActors {
 
         authorIdMapping[msg.sender].name = _name;
         authorIdMapping[msg.sender].aboutAuthor = _aboutAuthor;
+        authorIdMapping[msg.sender].authorAddr = msg.sender;
         authorIdToAddress[authorID] = msg.sender;
         authorID++;
         emit UserCreated("Author", _name, _aboutAuthor);
@@ -70,6 +73,7 @@ contract CreateActors {
         // check if msg.sender is not in readerIdMapping
         readerIdMapping[msg.sender].name = _name;
         readerIdMapping[msg.sender].aboutReader = _aboutReader;
+        readerIdMapping[msg.sender].readerAddr = msg.sender;
         readerIdToAddress[readerID] = msg.sender;
         readerID++;
         emit UserCreated("Reader", _name, _aboutReader);
