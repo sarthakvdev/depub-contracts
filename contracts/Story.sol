@@ -37,7 +37,17 @@ contract Story is CreateActors {
         string memory _question,
         bool _authorPreference
     ) public payable {
-        require(msg.value >= 1 ether, "Keep a Bounty");
+        require(msg.value >= 0.001 ether, "Bounty should be more than 0.001 ETH!");
+        // bool isOriginalAuthor = false;
+        // // The signer should be the author of the book by given bookId.
+        // author authorBookList = authorIdMapping[msg.signer].bookIdList;
+        // for(uint256 i = 0; i < authorBookList.length; i++) {
+        //     if(authorBookList[i] == _bookId) {
+        //         return true;
+        //     }
+        // }
+        // require(isOriginalAuthor == true, "Not the author of the Book!");
+        
         //uint chapterCount = bookIdMapping[_bookId].chapterIdList.length;
         bookIdMapping[_bookId].chapterIdList.push(chapterId);
         ChapterMapping[chapterId].author = msg.sender;

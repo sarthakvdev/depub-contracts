@@ -34,14 +34,14 @@ contract CreateActors {
     event HasReadBook(uint256 bookName, uint256 userName);
 
     uint256 bookId = 0;
-    uint readerID = 0; // required to get total readers
+    uint256 readerID = 0; // required to get total readers
     uint256 authorID = 0;
 
     // MAPPINGS
     mapping(address => author) public authorIdMapping;
     mapping(uint256 => address) authorIdToAddress;
     mapping(address => reader) public readerIdMapping;
-    mapping(uint => address) public readerIdToAddress;
+    mapping(uint256 => address) public readerIdToAddress;
     mapping(uint256 => book) public bookIdMapping;
     mapping(address => book[]) public booksOfAuthor;
 
@@ -53,7 +53,6 @@ contract CreateActors {
             bytes(authorIdMapping[msg.sender].name).length == 0,
             "Author already registered!"
         );
-        // console.log("bytes length %s", bytes(authorIdMapping[msg.sender].name).length);
 
         authorIdMapping[msg.sender].name = _name;
         authorIdMapping[msg.sender].aboutAuthor = _aboutAuthor;
@@ -81,7 +80,11 @@ contract CreateActors {
 
     function createBook(string memory _name) public {
         // check if msg.sender exists in authorIdMapping
-        // authorBookList[msg.sender][authorBookCount] = bookId;
+        require(
+            bytes(authorIdMapping[msg.sender].name).length != 0,
+            "Author is not registered!"
+        );
+
         authorIdMapping[msg.sender].bookIdList.push(bookId);
         bookIdMapping[bookId].name = _name;
         bookIdMapping[bookId].authorId = msg.sender;
